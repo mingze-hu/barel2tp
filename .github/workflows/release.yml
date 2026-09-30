@@ -1,0 +1,202 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to release, for example v1.0.0
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  version:
+    name: Verify version
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+
+      - name: Check that the tag matches the Cargo version
+        id: version
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+        run: |
+          package_version="$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')"
+          expected_tag="v${package_version}"
+          if [[ "$RELEASE_TAG" != "$expected_tag" ]]; then
+            echo "Tag $RELEASE_TAG does not match Cargo.toml version $package_version" >&2
+            exit 1
+          fi
+          echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$package_version" >> "$GITHUB_OUTPUT"
+
+  cli:
+    name: CLI / ${{ matrix.target }}
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        # The glibc build keeps the original file name; the musl build is statically linked and gets
+        # an extra -musl suffix, for machines with an old glibc or none at all.
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            suffix: ""
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            suffix: "-musl"
+          - os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            suffix: ""
+          - os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-musl
+            suffix: "-musl"
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.version.outputs.tag }}
+
+      - name: Update stable Rust
+        run: rustup update stable
+
+      - name: Install target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Run tests
+        run: cargo test --all-targets --locked --target ${{ matrix.target }}
+
+      - name: Build release
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      - name: Package Linux artifacts
+        shell: bash
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          TARGET: ${{ matrix.target }}
+          SUFFIX: ${{ matrix.suffix }}
+        run: |
+          package_name="barel2tp-${VERSION}-linux-${RUNNER_ARCH}${SUFFIX}"
+          mkdir -p staging
+          cp "target/${TARGET}/release/barel2tp" README.md config.example.toml staging/
+          chmod 755 staging/barel2tp
+          tar -czf "${package_name}.tar.gz" -C staging .
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: cli-linux-${{ runner.arch }}${{ matrix.suffix }}
+          path: barel2tp-${{ needs.version.outputs.version }}-linux-${{ runner.arch }}${{ matrix.suffix }}.tar.gz
+          if-no-files-found: error
+
+  macos:
+    name: macOS / ${{ matrix.os }}
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - macos-15-intel
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.version.outputs.tag }}
+
+      - name: Update stable Rust
+        run: rustup update stable
+
+      - name: Run Rust tests
+        run: cargo test --all-targets --locked
+
+      - name: Run Swift tests
+        run: swift test --package-path app
+
+      - name: Build macOS app
+        run: ./scripts/build-macos-app.sh
+
+      - name: Package macOS artifacts
+        shell: bash
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          cli_package="barel2tp-${VERSION}-macos-${RUNNER_ARCH}.tar.gz"
+          app_package="barel2tp-${VERSION}-macos-app-${RUNNER_ARCH}.zip"
+          mkdir -p staging
+          cp target/release/barel2tp README.md config.example.toml staging/
+          chmod 755 staging/barel2tp
+          tar -czf "$cli_package" -C staging .
+          ditto -c -k --sequesterRsrc --keepParent "dist/BareL2TP.app" "$app_package"
+
+      - name: Upload macOS CLI artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: cli-macos-${{ runner.arch }}
+          path: barel2tp-${{ needs.version.outputs.version }}-macos-${{ runner.arch }}.tar.gz
+          if-no-files-found: error
+
+      - name: Upload macOS app artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: app-macos-${{ runner.arch }}
+          path: barel2tp-${{ needs.version.outputs.version }}-macos-app-${{ runner.arch }}.zip
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub Release
+    needs:
+      - version
+      - cli
+      - macos
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: release-artifacts
+          merge-multiple: true
+
+      - name: Create release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.version.outputs.tag }}
+        run: |
+          mapfile -d '' assets < <(find release-artifacts -maxdepth 1 -type f -print0)
+          if (( ${#assets[@]} == 0 )); then
+            echo "No build artifacts found to release" >&2
+            exit 1
+          fi
+
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${assets[@]}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber
+          else
+            gh release create "$RELEASE_TAG" "${assets[@]}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
+              --title "BareL2TP $RELEASE_TAG" \
+              --generate-notes
+          fi

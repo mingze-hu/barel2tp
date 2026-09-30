@@ -1,0 +1,36 @@
+# L2TP server. An IPv4 address or a host name that resolves to IPv4.
+server = "vpn.example.com"
+port = 1701
+
+username = "your.name"
+
+# Reading the password from an environment variable keeps it off disk. If the
+# variable is not set, the password is prompted for on the terminal without echo.
+password_env = "BAREL2TP_PASSWORD"
+# password = "not recommended: plain-text password"
+
+# Required: only these IPv4 subnets go through the VPN; the default route is never changed.
+# Replace them with the remote subnets you need; routes = [] adds no subnet routes.
+routes = [
+  "10.20.0.0/16",
+  "172.20.8.0/24",
+]
+
+# L2TP/PPP encapsulation takes extra space; 1400 is a conservative default.
+mtu = 1400
+
+# PPP negotiation and L2TP control message parameters.
+timeout_seconds = 3
+retries = 5
+
+# L2TP control channel keepalive period. An unacknowledged HELLO disconnects
+# according to the timeout and retry settings above.
+hello_interval_seconds = 30
+
+# Some servers return DNS through the Microsoft IPCP extension; it is only logged,
+# system DNS is never changed.
+request_dns = false
+
+# Optional: local UDP address or port.
+# local_bind = "192.0.2.10"
+# local_port = 0

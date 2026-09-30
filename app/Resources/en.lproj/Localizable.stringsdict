@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- English plural rules. Keys are the English source text in the Swift code (the "other" form). -->
+<plist version="1.0">
+<dict>
+    <key>%lld lines are invalid</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@lines@</string>
+        <key>lines</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>lld</string>
+            <key>one</key>
+            <string>%lld line is invalid</string>
+            <key>other</key>
+            <string>%lld lines are invalid</string>
+        </dict>
+    </dict>
+    <key>%lld subnets</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@subnets@</string>
+        <key>subnets</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>lld</string>
+            <key>one</key>
+            <string>%lld subnet</string>
+            <key>other</key>
+            <string>%lld subnets</string>
+        </dict>
+    </dict>
+    <key>%lld subnets will be reachable once connected.</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@subnets@ will be reachable once connected.</string>
+        <key>subnets</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>lld</string>
+            <key>one</key>
+            <string>%lld subnet</string>
+            <key>other</key>
+            <string>%lld subnets</string>
+        </dict>
+    </dict>
+    <key>Connected via %@ with access to %lld subnets.</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>Connected via %@ with access to %#@subnets@.</string>
+        <key>subnets</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>lld</string>
+            <key>one</key>
+            <string>%lld subnet</string>
+            <key>other</key>
+            <string>%lld subnets</string>
+        </dict>
+    </dict>
+</dict>
+</plist>

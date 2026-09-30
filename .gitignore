@@ -1,0 +1,5 @@
+/target
+/app/.build
+/dist
+*.local.toml
+.DS_Store

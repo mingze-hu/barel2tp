@@ -1,0 +1,223 @@
+/*
+  Simplified Chinese UI strings. Keys are the English source text in the Swift code.
+  After changing English UI text, update the keys here and run scripts/check-i18n.py.
+*/
+
+/* AdvancedSettings.swift */
+"Tunnel" = "隧道";
+"Lower this if web pages fail to load or transfers stall" = "网页打不开或传输卡顿时可以调小";
+"Connection timeout" = "连接超时";
+"s" = "秒";
+"Retries" = "重试次数";
+"Keepalive interval" = "保活间隔";
+"This Mac" = "本机";
+"Local interface address" = "本地网卡地址";
+"Automatic" = "自动选择";
+"Local port" = "本地端口";
+"0 means assigned automatically" = "0 表示自动分配";
+"Client name" = "客户端名称";
+"Use this Mac's name" = "使用本机名称";
+"Request DNS from server" = "向服务器申请 DNS";
+"Only logged; system DNS settings are not changed" = "只记到日志，不会改系统 DNS 设置";
+"Restore Defaults" = "恢复默认值";
+
+/* AppDelegate.swift */
+"Cancel the connection and quit?" = "要中断连接并退出吗？";
+"The VPN connection in progress will be cancelled." = "正在建立的 VPN 连接会被中断。";
+"Cancel and Quit" = "中断并退出";
+"Disconnect the VPN and quit?" = "要断开 VPN 并退出吗？";
+"You will lose access to the remote network, and routes will be restored to how they were before connecting." = "退出后就访问不到内网资源了，网络路由会恢复成连接之前的样子。";
+"Disconnect and Quit" = "断开并退出";
+"Cancel" = "取消";
+
+/* AppModel.swift */
+"Disconnected" = "未连接";
+"Waiting for Authorization" = "等待授权";
+"Connecting" = "正在连接";
+"Connected" = "已连接";
+"Disconnecting" = "正在断开";
+"Connection Failed" = "连接失败";
+"The connection process did not exit within 15 seconds. Try again later." = "连接进程在 15 秒内没有退出，请稍后重试";
+"Couldn't Disconnect the VPN" = "无法断开 VPN";
+"Server address" = "服务器地址";
+"Username" = "用户名";
+"VPN password" = "VPN 口令";
+"The connection process did not exit within 15 seconds" = "连接进程在 15 秒内没有退出";
+"Can't Quit Yet" = "暂时无法退出";
+"The VPN has not been safely disconnected: %@" = "VPN 尚未安全断开：%@";
+"Leftover Routes Cleaned Up" = "残留路由已清理";
+"The routing table has been restored." = "路由表已经还原。";
+"Couldn't Clean Up Leftover Routes" = "清理残留路由失败";
+"Enter the VPN password" = "请填写 VPN 口令";
+"The VPN password must not contain line breaks" = "VPN 口令不能包含换行符";
+"Couldn't Connect the VPN" = "无法连接 VPN";
+"VPN Disconnected" = "VPN 连接已断开";
+"Fix it, then click “Connect” again." = "改好后再点一次「连接」。";
+"Settings Need Attention" = "设置需要调整";
+
+/* AppSection.swift */
+"Overview" = "概览";
+"Connection" = "连接设置";
+"Subnets" = "内网网段";
+"General" = "通用";
+"Log" = "运行日志";
+
+/* BackendRunner.swift */
+"Couldn't create the password pipe: %@" = "创建口令管道失败：%@";
+"The connection process did not respond to the disconnect request" = "连接进程没有响应断开请求";
+"Couldn't create the local control socket: %@" = "创建本地控制套接字失败：%@";
+"Couldn't send the disconnect command: %@" = "发送断开命令失败：%@";
+"The local control socket path is too long" = "本地控制套接字路径过长";
+"Timed out waiting for the authorized process to read the password" = "等待授权进程读取口令超时";
+"Couldn't open the password pipe: %@" = "打开口令管道失败：%@";
+"Couldn't write to the password pipe: %@" = "写入口令管道失败：%@";
+"The barel2tp backend was not found. Build the app with the project's build script." = "找不到 barel2tp 后端，请使用项目构建脚本生成应用";
+"The VPN backend is already running" = "VPN 后端已经在运行";
+"Administrator authorization was cancelled" = "已取消管理员授权";
+"The configuration check failed" = "配置检查未通过";
+"The backend command failed" = "后端命令执行失败";
+
+/* BareL2TPApp.swift */
+"Connect" = "连接";
+"Connect VPN" = "连接 VPN";
+"Disconnect VPN" = "断开 VPN";
+"Connection Settings…" = "连接设置…";
+"Subnets…" = "内网网段…";
+"Log…" = "运行日志…";
+
+/* ConnectionFailure.swift */
+"The server requires an L2TP tunnel secret." = "服务器要求 L2TP 隧道密钥。";
+"Servers that require a tunnel secret are not supported yet. Ask your network administrator how to connect." = "当前版本还不支持带隧道密钥的服务器，请联系网络管理员确认接入方式。";
+"The server rejected this account." = "服务器拒绝了这个账户。";
+"Check the username and password in Connection settings (they are case-sensitive). If you changed your password recently, enter it again." = "请到「连接设置」核对用户名和口令，注意区分大小写；口令刚改过的话需要重新填写。";
+"The VPN server could not be found." = "找不到这台 VPN 服务器。";
+"Check the server address in Connection settings and make sure this Mac is online." = "请检查「连接设置」里的服务器地址是否写对，并确认这台 Mac 已经联网。";
+"The server did not respond and the connection timed out." = "服务器没有响应，连接超时。";
+"Make sure the server address and port are correct and that this network can reach the server. Some public networks block UDP port 1701, which L2TP uses." = "请确认服务器地址和端口正确，并且当前网络允许访问它；部分公共网络会拦截 L2TP 使用的 UDP 1701 端口。";
+"The network is unreachable; the server can't be reached." = "网络不可达，无法到达服务器。";
+"Check this Mac's network connection, or try again on a different network." = "请检查这台 Mac 的网络连接，或换一个网络后重试。";
+"The server refused the connection." = "服务器拒绝了连接请求。";
+"Make sure the port is correct, and ask your network administrator whether the service is running." = "请确认端口填写正确，并向网络管理员确认服务是否开启。";
+"Couldn't create the VPN network interface: insufficient privileges." = "创建 VPN 网络接口失败，权限不足。";
+"Connect again and complete administrator authorization in the system dialog." = "请重新连接，并在系统弹出的窗口里完成管理员授权。";
+"Couldn't set up subnet routes." = "设置网段路由失败。";
+"Check the subnets under Subnets and make sure they don't conflict with this Mac's current network." = "请到「内网网段」检查填写的网段，确认它们没有和本机现有网络冲突。";
+"The server closed the connection." = "服务器主动断开了连接。";
+"The session may have expired or been limited by the server. Try again later, and contact your network administrator if it keeps failing." = "可能是会话过期或服务器侧的限制，稍后重试；如果一直失败请联系网络管理员。";
+"The VPN backend quit unexpectedly." = "VPN 后端意外退出。";
+"Try again. If it still fails, send the contents of the Log to your network administrator." = "请重试一次；如果仍然失败，把「运行日志」里的内容发给网络管理员。";
+"See the Log for details." = "详细过程见「运行日志」。";
+
+/* ContentView.swift */
+"View Log" = "查看日志";
+"OK" = "好";
+"App" = "应用";
+"Connect to a remote network" = "连接到远端内网";
+"Cancel Connection" = "取消连接";
+"Reconnect" = "重新连接";
+"Go to Connection Settings" = "前往连接设置";
+"Server" = "服务器";
+"Not set" = "未填写";
+"Account" = "账户";
+"None" = "未添加";
+"Connection Details" = "连接详情";
+"Server and port" = "服务器地址与端口";
+"Password" = "口令";
+"Requested from server (logged only)" = "向服务器申请（仅记录）";
+"Use system settings" = "保持系统设置";
+"This tunnel is not encrypted" = "这条隧道本身不加密";
+"L2TP does not encrypt tunnel traffic. Use it only on trusted networks." = "L2TP 不加密隧道内容，请只在可信网络中使用。";
+"vpn.example.com or an IP address" = "vpn.example.com 或 IP 地址";
+"Port" = "端口";
+"Employee ID or domain account" = "工号或域账号";
+"Remember password" = "记住口令";
+"The password is stored in the macOS Keychain on this Mac. It is never written to the configuration file or the log." = "口令保存在本机的 macOS 钥匙串里，不会写进配置文件，也不会出现在日志中。";
+"Advanced Options" = "高级选项";
+"Hide password" = "隐藏口令";
+"Show password" = "显示口令";
+"%lld lines are invalid" = "有 %lld 行写法不对";
+"%@. Use the form 10.20.0.0/16." = "%@。正确写法形如 10.20.0.0/16。";
+"Subnets routed through the VPN" = "走 VPN 的网段";
+"One IPv4 subnet per line. Only traffic to these subnets goes through the VPN." = "每行一个 IPv4 网段，只有这些网段的流量走 VPN。";
+"%lld subnets" = "%lld 个内网网段";
+"Reachable once connected" = "连接后可以访问";
+"Show menu bar icon" = "显示菜单栏图标";
+"Menu Bar" = "菜单栏";
+"Language" = "语言";
+"Relaunch to switch the language" = "重新启动以切换语言";
+"Relaunch Now" = "立即重新启动";
+"The new language takes effect after BareL2TP relaunches. Relaunching disconnects the VPN." = "新语言将在 BareL2TP 重新启动后生效。重新启动会断开 VPN。";
+"The new language takes effect after BareL2TP relaunches." = "新语言将在 BareL2TP 重新启动后生效。";
+"Closing the window or pressing ⌘Q only hides the app in the menu bar and keeps the VPN connected. To quit, choose “Quit BareL2TP” from the menu bar icon." = "关掉窗口或按 ⌘Q 只会收起到菜单栏，VPN 保持连接；要退出请用菜单栏图标里的「退出 BareL2TP」。";
+"With the icon hidden, ⌘Q quits the app and disconnects the VPN." = "图标关闭后，⌘Q 会直接退出并断开 VPN。";
+"Leftover routes" = "残留路由";
+"Clean Up" = "清理";
+"Maintenance" = "维护";
+"About" = "关于";
+"Version" = "版本";
+"Configuration and log" = "配置与日志";
+"Show in Finder" = "在访达中显示";
+"The routing table is clean. Routes are only left behind if the backend is force-quit; this button becomes available when that happens." = "路由表是干净的。后端被强制结束时才会留下没还原的路由，到时这里会亮起来。";
+"The previous connection left routes behind. Disconnect first to clean them up." = "上次连接留下了没还原的路由，断开当前连接后才能清理。";
+"The previous connection was force-quit and some routes were not restored. Cleaning up requires administrator authorization." = "上次连接被强制结束，还有路由没有还原。清理需要一次管理员授权。";
+"Development" = "开发版";
+"%@ (%@)" = "%@（%@）";
+"A complete record of the connection. Send it to your network administrator if something goes wrong." = "连接过程的完整记录，遇到问题时可以发给网络管理员。";
+"Copy" = "复制";
+"Show File" = "显示文件";
+"Clear" = "清空";
+"The log can't be cleared while connected" = "连接期间不能清空日志";
+"Connection details will appear here after you connect" = "连接一次 VPN 后，过程会记录在这里";
+"Set Up" = "去填写";
+"Connected to the remote network" = "已连接到远端内网";
+"Waiting for your authorization" = "等待你授权";
+"Couldn't connect" = "这次没能连上";
+"Ready to connect" = "随时可以连接";
+"A few settings are missing" = "还差几项设置";
+"The tunnel is up, but no subnets are configured, so no traffic goes through the VPN." = "隧道已建立，但没有配置网段，暂时没有流量走 VPN。";
+"Connected via %@ with access to %lld subnets." = "正在通过 %@ 访问 %lld 个内网网段。";
+"macOS will ask for this Mac's login password to create the VPN network interface and routes." = "系统会要求输入这台 Mac 的登录密码，用于创建 VPN 网络接口和路由。";
+"Verifying your account and establishing the tunnel." = "正在验证账户并建立隧道。";
+"Closing the tunnel and restoring network routes." = "正在关闭隧道并恢复网络路由。";
+"The connection was interrupted." = "连接中断了。";
+"Still needed: %@." = "还需要填写：%@。";
+"No subnets configured yet; no traffic will go through the VPN once connected." = "还没有配置内网网段，连上后不会有流量走 VPN。";
+"%lld subnets will be reachable once connected." = "连接后可以访问 %lld 个内网网段。";
+"Saved in Keychain" = "已保存到钥匙串";
+"This session only" = "仅本次使用";
+"Connected %@" = "已连接 %@";
+"Invalid format; use the form 10.20.0.0/16" = "写法不对，正确写法形如 10.20.0.0/16";
+
+/* DesignSystem.swift */
+"Disconnect" = "断开";
+"Authorizing" = "授权中";
+"Retry" = "重试";
+
+/* KeychainStore.swift */
+"Unknown error" = "未知错误";
+"Couldn't access the Keychain: %@" = "访问钥匙串失败：%@";
+
+/* MenuBarContent.swift */
+"Open Main Window" = "打开主窗口";
+"Hide Menu Bar Icon…" = "隐藏菜单栏图标…";
+"Quit BareL2TP" = "退出 BareL2TP";
+"No server set" = "还没有填写服务器";
+"Enter this Mac's login password in the system dialog" = "请在系统窗口里输入这台 Mac 的登录密码";
+"The last connection failed" = "上次连接失败了";
+"Still needed: %@" = "还需要填写：%@";
+"No subnets configured" = "还没有配置内网网段";
+"Finish Connection Settings" = "先完成连接设置";
+"Disconnecting…" = "正在断开…";
+
+/* VPNConfiguration.swift */
+"Enter the server address in Connection settings first" = "请先在「连接设置」里填写服务器地址";
+"Enter the username in Connection settings first" = "请先在「连接设置」里填写用户名";
+"The server port must be a number from 1 to 65535, usually 1701" = "服务器端口需要填 1 到 65535 之间的数字，通常是 1701";
+"MTU must be a number from 576 to 1500; the default is 1400" = "MTU 需要填 576 到 1500 之间的数字，默认 1400";
+"Connection timeout, retries and keepalive interval must all be greater than 0" = "连接超时、重试次数和保活间隔都必须大于 0";
+"The local port must be a number from 0 to 65535; 0 means assigned automatically" = "本地端口需要填 0 到 65535 之间的数字，0 表示自动分配";
+"The local bind address is not a valid IPv4 address; leave it empty to choose automatically" = "本地绑定地址不是有效的 IPv4 地址，留空即可自动选择";
+"Subnet “%@” is invalid; use the form 10.20.0.0/16" = "网段“%@”写法不对，正确写法形如 10.20.0.0/16";
+
+/* AppLanguage.swift */
+"System Default" = "跟随系统";

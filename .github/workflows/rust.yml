@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust:
+    name: Rust / ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - macos-15-intel
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Update stable Rust
+        run: rustup update stable
+
+      - name: Install code quality components
+        run: rustup component add rustfmt clippy
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run tests
+        run: cargo test --all-targets --locked
+
+      - name: Check compilation
+        run: cargo check --all-targets --locked
+
+      - name: Build release
+        run: cargo build --release --locked
+
+      - name: Run Clippy
+        run: cargo clippy --all-targets --locked -- -D warnings
+
+      # Releases include musl builds, and the libc bindings differ between musl and glibc;
+      # check compilation here instead of finding out only when a release is tagged.
+      - name: Check that the musl target compiles
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          rustup target add x86_64-unknown-linux-musl
+          cargo check --all-targets --locked --target x86_64-unknown-linux-musl
+
+  swift:
+    name: Swift / ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - macos-15-intel
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Check that the Chinese UI translation is complete
+        run: python3 scripts/check-i18n.py
+
+      - name: Run Swift unit tests
+        run: swift test --package-path app
+
+      - name: Build macOS app
+        run: ./scripts/build-macos-app.sh

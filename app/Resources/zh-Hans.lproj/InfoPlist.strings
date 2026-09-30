@@ -1,0 +1,2 @@
+/* Localized Info.plist fields */
+"NSAppleEventsUsageDescription" = "用于请求管理员授权，以创建 VPN 网络接口和路由。";
